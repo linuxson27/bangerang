@@ -154,7 +154,7 @@ ApplicationWindow {
         Item { // Container
             ColumnLayout {
                 anchors.centerIn: parent
-                spacing: 10
+                spacing: 20
 
                 Label {
                     font.pixelSize: 48
@@ -162,7 +162,7 @@ ApplicationWindow {
                 }
 
                 Label {
-                    Layout.topMargin: -10
+                    Layout.topMargin: -20
                     font.pixelSize: 18
                     text: "add a profile for another person watching bangerang"
                     color: "grey"
@@ -199,11 +199,20 @@ ApplicationWindow {
                         anchors.left: profile_icon.right
                         anchors.leftMargin: 20
 
-                        TextField {
+                        TextField { // New profile name
+                            id: new_profile_name
                             width: 220
                             anchors.left: parent.left
                             placeholder_text: "name"
                             show_del_btn: true
+                        }
+
+                        Switch { // Kid option
+                            id: kid_switch
+                            anchors.top: new_profile_name.bottom
+                            anchors.topMargin: 10
+                            anchors.left: parent.left
+                            text: "kid?"
                         }
                     }
                 }
@@ -211,7 +220,34 @@ ApplicationWindow {
                 Rectangle { // Separator
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
+                    Layout.bottomMargin: 20
                     color: "grey"
+                }
+
+                Item { // Button container
+                    Layout.fillWidth: true
+
+                    Button { // Continue button
+                        id: new_profile_continue_btn
+                        width: 120
+                        height: 60
+                        text: "continue"
+                        bg_color: "#1E90FF"
+                        txt_color: "white"
+                        pressed_border: "transparent"
+                        highlight_border: "transparent"
+                    }
+
+                    Button { // Cancel button
+                        id: new_profile_cancel_btn
+                        width: 120
+                        height: 60
+                        anchors.left: new_profile_continue_btn.right
+                        anchors.leftMargin: 20
+                        text: "cancel"
+                        pressed_border: "transparent"
+                        highlight_border: "transparent"
+                    }
                 }
             }
         }

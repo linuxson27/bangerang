@@ -138,8 +138,8 @@ TextField { // Customized input field
 			name: "input is active"
 			PropertyChanges {
 				target: hoverText
-				font.pixelSize: 9
-				y: -8
+				font.pixelSize: 12
+				y: -10
 			}
 			PropertyChanges {
 				target: activeUnderline

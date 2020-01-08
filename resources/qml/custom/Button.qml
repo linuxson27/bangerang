@@ -8,7 +8,7 @@ Button {
 
 	property color bg_color: "white"
 	property color txt_color: "black"
-	property int font_size: 12
+	property int font_size: 18
 	property int b_width: 0
 	property real b_radius: 0
 	property color b_color: "transparent"
@@ -93,6 +93,7 @@ Button {
 				text: ctrl.text
 				padding: 0
 				horizontalAlignment: Text.AlignHCenter
+				verticalAlignment: Text.AlignVCenter
 				font.pixelSize: font_size
 				lineHeight: 0.80
 				color: txt_color
