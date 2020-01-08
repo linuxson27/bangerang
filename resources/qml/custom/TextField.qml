@@ -7,16 +7,16 @@ TextField { // Customized input field
 	id: inp
 
 	property string placeholder_text: ""
-	property int font_size: 12
+	property string font_family: "Roboto"
+	property int font_size: 18
 	property color font_color: "white"
 	property int u_thickness: 2
 	property color u_color: "dodgerblue"
 	property bool show_del_btn: false
 
+	font.family: font_family
 	font.pixelSize: font_size
 	color: font_color
-	rightPadding: 20
-	onTextChanged: inp.state = "input is active"
 	onFocusChanged: {
 		focus || !inp.text ? inp.state = "input is active" : null;
 		!focus || !inp.text ? inp.state = "input is inactive": null;
@@ -67,6 +67,7 @@ TextField { // Customized input field
 			id: hoverText
 			anchors.left: parent.left
 			anchors.leftMargin: 10
+			font.family: font_family
 			font.pixelSize: font_size
 			color: "grey"
 			text: placeholder_text
@@ -79,6 +80,7 @@ TextField { // Customized input field
 			anchors.leftMargin: 10
 			anchors.top: parent.bottom
 			anchors.topMargin: 5
+			font.family: font_family
 			font.pixelSize: font_size
 			color: "red"
 			text: ""

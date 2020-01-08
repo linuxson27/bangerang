@@ -14,7 +14,7 @@ ApplicationWindow {
 	StackView { // Main container for all pages
 		id: view
 		anchors.fill: parent
-		initialItem: splash
+		initialItem: add_profile
 	}
 
     Component { // Splash screen
@@ -146,6 +146,83 @@ ApplicationWindow {
                 ]
             }
 		}
+    }
+
+    Component { // Shows before show_profiles if config shows no users
+        id: add_profile
+
+        Item { // Container
+            ColumnLayout {
+                anchors.centerIn: parent
+                spacing: 10
+
+                Label {
+                    font.pixelSize: 48
+                    text: "add profile"
+                }
+
+                Label {
+                    Layout.topMargin: -10
+                    font.pixelSize: 18
+                    text: "add a profile for another person watching bangerang"
+                    color: "grey"
+                }
+
+                Rectangle { // Separator
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    color: "grey"
+                }
+
+                Item { // New profile form container
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: childrenRect.height
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+
+                    Button {
+                        id: profile_icon
+                        width: 80
+                        height: 80
+                        bg_color: "#191919"
+                        b_width: 1
+                        b_color: "grey"
+                        pressed_border: "grey"
+                        highlight_border: "transparent"
+                        show_text: false
+                        show_icon: true
+                        icon_source: "../../img/smiley.svg"
+                        icon_opacity: 0.25
+                    }
+
+                    Item { // Form controls container
+                        anchors.left: profile_icon.right
+                        anchors.leftMargin: 20
+
+                        TextField {
+                            width: 220
+                            anchors.left: parent.left
+                            placeholder_text: "name"
+                            show_del_btn: true
+                        }
+                    }
+                }
+
+                Rectangle { // Separator
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    color: "grey"
+                }
+            }
+        }
+    }
+
+    Component {
+        id: show_profiles
+
+        Item { // Container
+
+        }
     }
 
 	Connections {

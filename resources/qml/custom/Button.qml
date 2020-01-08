@@ -1,81 +1,77 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
-import QtGraphicalEffects 1.14
-// import QtMultimedia 5.13
 
 
 Button {
 	id: ctrl
-	clip: true
-	onPressed: {
-		ctrl.state == "button inactive" ? ctrl.state = "button active" : ctrl.state = "button inactive";
-		// button_sound.play();
-	}
 
-	property real border_radius: ctrl.width / 10
-	property bool show_text: true
-	property color txt_color: "#9D9D9D"
+	property color bg_color: "white"
+	property color txt_color: "black"
 	property int font_size: 12
-	property bool show_icon: false
+	property int b_width: 0
+	property real b_radius: 0
+	property color b_color: "transparent"
+	property bool a_true: false
 	property string icon_source: ""
+	property bool show_icon: false
+	property real icon_opacity: 1
+	property bool show_text: true
+	property int btn_id: 0
 	property int content_spacing: 0
+	property string pressed_border: "dodgerblue"
+	property string highlight_border: "crimson"
 
-	// SoundEffect {
-	// 	id: button_sound
-	// 	source: "../../sounds/button.wav"
-	// }
-	
-	background: Rectangle { // Main container
-		id: container
-		anchors.fill: parent
-		color: "transparent"
+	background: Rectangle {
+		border.width: b_width
+		border.color: b_color
+		radius: b_radius
+		antialiasing: a_true
+		color: bg_color
 
-		Rectangle { // Dropshadow container and highlight border
-			id: border
-			width: parent.width - 2
-			height: parent.height - 2
+		Rectangle { // Animated darker touch/click
+			id: bg
+			color: Qt.darker(bg_color, 1.25)
 			anchors.centerIn: parent
-			radius: border_radius
-			visible: false
-			antialiasing: true
-			gradient: Gradient {
-				GradientStop { position: 0.0; color: "#404040" }
-				GradientStop { position: 1.0; color: "#1E1E1E" }
-			}
-
-			Rectangle { // Button fill
-				id: bg
-				width: parent.width - 2
-				height: parent.height - 2
-				anchors.centerIn: parent
-				radius: border_radius - 4
-
-				RadialGradient {
-					anchors.fill: parent
-					source: bg
-					gradient: Gradient {
-						GradientStop { position: 0.0; color: "#3B3B3B" }
-						GradientStop { position: 0.5; color: "#2A2A2A" }
-					}
-				}
-			}
+			radius: width / 2
 		}
 
-		DropShadow { // Button shadow
+		Rectangle { // Border on active highlight
 			anchors.fill: parent
-			horizontalOffset: 1
-			verticalOffset: 1
-			radius: 8.0
-			samples: 17
-			color: "#50000000"
-			source: border
+			border.width: ctrl.activeFocus ? 1 : 0
+			border.color: highlight_border
+			color: "transparent"
+		}
+
+		Rectangle { // Border on press
+			anchors.fill: parent
+			border.width: ctrl.down ? 1 : 0
+			border.color: pressed_border
+			color: "transparent"
 		}
 	}
+	onPressed: ctrl.state = "button pressed";
+	onReleased: ctrl.state = "button inactive";
+	clip: true
+
 	contentItem: Item {
 		anchors.fill: parent
 
-		Column { // Content container
+		MouseArea {
+			anchors.fill: parent
+			propagateComposedEvents: true
+			hoverEnabled: true
+
+			onClicked: mouse.accepted =false;
+			onPressed: mouse.accepted = false;
+			onReleased: mouse.accepted = false;
+			onDoubleClicked: mouse.accepted = false;
+			onPositionChanged: mouse.accepted = false;
+			onPressAndHold: mouse.accepted = false;
+			onExited: ctrl.pressed ? ctrl.state = "button inactive" : ctrl.state = "button inactive"
+		}
+
+		Column {
 			anchors.centerIn: parent
 			spacing: content_spacing
 
@@ -84,18 +80,10 @@ Button {
 				width: sourceSize.width
 				height: sourceSize.height
 				anchors.horizontalCenter: parent.horizontalCenter
-				source: icon_source + ".svg"
+				source: icon_source
 				fillMode: Image.PreserveAspectFit
 				visible: show_icon
-				smooth: true
-
-				Glow {
-					id: icon_glow
-					anchors.fill: icon
-					radius: 4
-					samples: 9
-					source: icon
-				}
+				opacity: icon_opacity
 			}
 
 			Text {
@@ -110,52 +98,40 @@ Button {
 				color: txt_color
 				wrapMode: Text.WordWrap
 				visible: show_text
-
-				Glow {
-					id: text_glow
-					anchors.fill: text
-					radius: 1
-					samples: 3
-					source: text
-				}
 			}
 		}
 	}
+
+
 	states: [
 		State {
 			name: "button inactive"
 			PropertyChanges {
-				target: icon
-				source: icon_source + ".svg"
-			}
-			PropertyChanges {
-				target: icon_glow
-				color: "transparent"
-			}
-			PropertyChanges {
-				target: text_glow
-				color: "transparent"
+				target: bg
+				width: 0
+				height: 0
 			}
 		},
 		State {
-			name: "button active"
+			name: "button pressed"
 			PropertyChanges {
-				target: icon
-				source: icon_source + "_active.svg"
-			}
-			PropertyChanges {
-				target: icon_glow
-				color: "#501e90ff"
-			}
-			PropertyChanges {
-				target: text
-				color: "dodgerblue"
-			}
-			PropertyChanges {
-				target: text_glow
-				color: "#501e90ff"
+				target: bg
+				width: ctrl.width * 2
+				height: ctrl.width * 2
 			}
 		}
 	]
 	state: "button inactive"
+	transitions: [
+		Transition {
+			from: "button inactive"
+			to: "button pressed"
+			NumberAnimation { properties: "width, height"; duration: 150 }
+		},
+		Transition {
+			from: "button pressed"
+			to: "button inactive"
+			NumberAnimation { properties: "width, height"; duration: 150 }
+		}
+	]
 }
