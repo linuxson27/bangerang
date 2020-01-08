@@ -9,6 +9,7 @@ ApplicationWindow {
 	width: 350
 	height: 250
 	color: '#E0E5EC'
+    Component.onCompleted: Bangerang.check_update();
 
 	StackView { // Main container for all pages
 		id: view
@@ -42,7 +43,6 @@ ApplicationWindow {
                 repeat: false
 				onTriggered: {
 					busyIndicator.state = "busy fade end";
-					Bangerang.signal_test();
 				}
             }
 
@@ -151,8 +151,15 @@ ApplicationWindow {
 	Connections {
 		target: Bangerang
 
-		onTest: {
-			console.log("Connection successful")
+		//001
+		onFinished_loading: {
+			if (callback == "current") {
+				console.log("App is up to date!");
+			} else {
+                console.log("Up is outdated, please update");
+				// loading_label = false;
+				// updatePopup.open();
+			}
 		}
 	}
 }
