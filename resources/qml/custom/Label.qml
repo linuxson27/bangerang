@@ -6,6 +6,6 @@ Label {
     id: label
     text: label.text
     font.family: "Roboto"
-    font.pixelSize: 14
-    color: "#585858"
+    font.pixelSize: 12
+    color: "white"
 }

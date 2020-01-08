@@ -1,7 +1,7 @@
 # bangerang - series/movies local file manager and viewer
 __author__ = "A Jones"
 __copyright__ = "Copyright 2019"
-__version__ = "1.0.0"
+__version__ = "v0.1-alpha"
 __maintainer__ = "A Jones"
 __email__ = "linuxson27@gmail.com"
 __contact__ = "081 028 7472"
@@ -26,8 +26,8 @@ class Bangerang(QObject):
     error = pyqtSignal(list, arguments=['payload'])
     notify = pyqtSignal(list, arguments=['payload'])
     finished_loading = pyqtSignal(str, arguments=['callback'])
-    # config = pyqtSignal(list, arguments=['config'])
-    # config_check = pyqtSignal(list , arguments=['callback'])
+    config = pyqtSignal(list, arguments=['config'])
+    config_check = pyqtSignal(list , arguments=['callback'])
 
     def __init__(self):
         QObject.__init__(self)
@@ -96,3 +96,105 @@ class Bangerang(QObject):
             remote_ver = None
         
         return remote_ver
+
+
+    #002
+    @pyqtSlot()
+    def download_update(self):
+        """
+        Thread worker which runs the download function
+        """
+        download_thread = threading.Thread(target=self._download_update)
+        download_thread.daemon = True
+        download_thread.start()
+
+
+    #002
+    def _download_update(self):
+        """
+        Thread runs when the update check returns 'update'
+        Opens a new browser window which initiates the download,
+        letting the user choose where to download to
+        """
+        try:
+            remote_ver = self.get_remote_tag()
+            url = "https://github.com/linuxson27/bangerang/releases/download/" + \
+                    remote_ver + "/bangerang-" + \
+                    remote_ver + ".exe"
+            webbrowser.open(url)
+        except Exception as e:
+            error = translate_error(e)
+            self.error.emit(error)
+
+
+    #003
+    @pyqtSlot(bool)
+    def get_config(self, req):
+        """
+        Reads config values from .ini file - mostly
+        used to store db connection parameters and user details
+        Depending on 'req' bool, will either return, or emit signal
+        with all the required values
+
+        :param req:             int
+        :return:                []
+        """
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        pass
+
+
+    #003
+    @pyqtSlot()
+    def check_config(self):
+        """
+        Checks the domain config group for any empty
+        fields, and if present, calls to have the createUserPopup
+        modal shown. If not, calls to have the connection checked
+        """
+        config_present = False
+
+        params = self.get_config(1)
+        app_init = params[0]
+
+        if app_init[1] == "true":
+            self.config_check.emit(['incomplete'])
+        else:
+            for value in domain_params:
+                if value != "":
+                    config_present = True
+                else:
+                    config_present = False
+                    break
+
+            if config_present:
+                self.check_connection()
+            else:
+                self.config_check.emit(['incomplete'])
+
+
+    #003
+    @pyqtSlot(list)
+    def write_config(self, data):
+        """
+        Writes the config back to the .ini file, called
+        from the settingsPopup modal when the save button is clicked
+
+        :param data:            list which contains new config.ini entries
+        """
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
+        # config.set('APP', 'initial_startup', 'false')
+
+        # config.set('DOMAIN_PARAMS', 'domain', data[0])
+        # config.set('DOMAIN_PARAMS', 'user', data[2])
+        # config.set('DOMAIN_PARAMS', 'password', data[4])
+
+        # config.set('DB_PARAMS', 'dbname', data[1])
+        # config.set('DB_PARAMS', 'user', data[3])
+        # config.set('DB_PARAMS', 'password', data[5])
+
+        # with open('config.ini', 'w') as config_file:
+        #     config.write(config_file)
+        pass

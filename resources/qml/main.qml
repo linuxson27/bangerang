@@ -8,7 +8,7 @@ ApplicationWindow {
 	visible: true
 	width: 350
 	height: 250
-	color: '#E0E5EC'
+	color: '#191919'
     Component.onCompleted: Bangerang.check_update();
 
 	StackView { // Main container for all pages
@@ -48,12 +48,12 @@ ApplicationWindow {
 
 			Image { // Logo
 				id: logo
-				width: 220
-				height: 80
+				width: 155
+				height: 38
 				anchors.centerIn: parent
 				fillMode: Image.PreserveAspectFit
 				antialiasing: true
-				source: "../img/logo.png"
+				source: "../img/logo.svg"
 				states: [
 					State {
 						name: "logo fade-in start"
