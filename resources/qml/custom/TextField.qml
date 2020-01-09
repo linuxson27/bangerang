@@ -86,13 +86,12 @@ TextField { // Customized input field
 			text: ""
 		}
 
-		Rectangle {
+		Rectangle { // Delete button
 			visible: show_del_btn
 			id: inputDelBtn
-			width: 16
-			height: 16
+			width: 24
+			height: 24
 			anchors.right: parent.right
-			//anchors.rightMargin: 10
 			anchors.verticalCenter: parent.verticalCenter
 			color: { btnMA.pressed ? Qt.darker("#191919", 1.25) : "#191919" }
 			radius: width / 2
@@ -102,7 +101,7 @@ TextField { // Customized input field
 				width: 10
 				height: 10
 				anchors.centerIn: parent
-				source: "../../img/close.png"
+				source: "../../img/close.svg"
 				antialiasing: true
 			}
 		}
@@ -158,8 +157,8 @@ TextField { // Customized input field
 			}
 			PropertyChanges {
 				target: hoverText
-				font.pixelSize: 9
-				y: -5
+				font.pixelSize: 12
+				y: -10
 				color: "red"
 			}
 			PropertyChanges {
