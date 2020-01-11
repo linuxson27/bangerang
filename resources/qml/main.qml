@@ -14,7 +14,7 @@ ApplicationWindow {
 	StackView { // Main container for all pages
 		id: view
 		anchors.fill: parent
-		initialItem: add_profile
+		initialItem: select_profile
 	}
 
     Component { // Splash screen
@@ -254,10 +254,109 @@ ApplicationWindow {
     }
 
     Component {
-        id: show_profiles
+        id: select_profile
 
         Item { // Container
+            Component.onCompleted: Bangerang.get_profiles();
 
+            ColumnLayout {
+                anchors.centerIn: parent
+                spacing: 30
+
+                Label {
+                    Layout.fillWidth: true
+                    font.pixelSize: 48
+                    text: "who is watching?"
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                RowLayout { // Flickable and button container
+                    Layout.fillWidth: true
+                    spacing: 20
+
+                    Flickable { // Profiles list flickable
+                        id: profiles_flickable
+                        Layout.preferredWidth: childrenRect.width
+                        Layout.preferredHeight: 110
+                        Layout.maximumWidth: 490
+                        contentWidth: (profiles_repeater.count * 82) + ((profiles_repeater.count - 1) * 20)
+                        contentHeight: 0
+                        flickableDirection: Flickable.HorizontalFlick
+                        clip: true
+
+                        ListModel { // Profiles list model
+                            id: profiles_model
+
+                            ListElement {
+                                profile_id: "ants"
+                                profile_image: "../../img/profile_pics/anthony.png"
+                            }
+
+                            ListElement {
+                                profile_id: "maddy"
+                                profile_image: "../../img/profile_pics/maddy.png"
+                            }
+
+                            ListElement {
+                                profile_id: "boetie"
+                                profile_image: "../../img/profile_pics/boetie.png"
+                            }
+                        }
+
+                        Row { // Profile accounts row container
+                            width: (profiles_repeater.count * 82) + ((profiles_repeater.count - 1) * 20)
+                            height: 100
+                            spacing: 20
+
+                            Repeater { // Profiles item repeater
+                                id: profiles_repeater
+                                model: profiles_model
+
+                                Item { // Button and label container
+                                    width: 82
+                                    height: 100
+                                    anchors.verticalCenter: parent.verticalCenter
+
+                                    Label { // Profile name
+                                        id: profile_name
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        text: profile_id
+                                        font.pixelSize: 14
+                                    }
+
+                                    Button { // Profile button
+                                        id: profile_btn
+                                        width: 82
+                                        height: 82
+                                        anchors.top: profile_name.bottom
+                                        anchors.topMargin: 5
+                                        bg_color: "#191919"
+                                        pressed_border: "dodgerblue"
+                                        highlight_border: "transparent"
+                                        show_text: false
+                                        show_icon: true
+                                        icon_source: profile_image
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Button { // Add profile button
+                        id: add_profile_btn
+                        Layout.preferredWidth: 82
+                        Layout.preferredHeight: 82
+                        Layout.alignment: Qt.AlignBottom
+                        Layout.bottomMargin: 4
+                        bg_color: "#191919"
+                        pressed_border: "transparent"
+                        highlight_border: "transparent"
+                        show_text: false
+                        show_icon: true
+                        icon_source: "../../img/add.svg"
+                    }
+                }
+            }
         }
     }
 
@@ -270,9 +369,11 @@ ApplicationWindow {
 				console.log("App is up to date!");
 			} else {
                 console.log("Up is outdated, please update");
-				// loading_label = false;
-				// updatePopup.open();
 			}
 		}
+
+        onProfiles: {
+            console.log(profiles);
+        }
 	}
 }

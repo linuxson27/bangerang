@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/home/linuxson/.local/share/virtualenvs/bangerang-HOOADRhM/bin/python"
+    "python.pythonPath": "/home/linuxson/.local/share/virtualenvs/bangerang-HOOADRhM/bin/python",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }

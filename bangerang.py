@@ -28,6 +28,7 @@ class Bangerang(QObject):
     finished_loading = pyqtSignal(str, arguments=['callback'])
     config = pyqtSignal(list, arguments=['config'])
     config_check = pyqtSignal(list , arguments=['callback'])
+    profiles = pyqtSignal(str, arguments=['profiles'])
 
     def __init__(self):
         QObject.__init__(self)
@@ -198,3 +199,8 @@ class Bangerang(QObject):
         # with open('config.ini', 'w') as config_file:
         #     config.write(config_file)
         pass
+
+
+    @pyqtSlot()
+    def get_profiles(self):
+        self.profiles.emit("All user profiles")
