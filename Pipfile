@@ -6,6 +6,11 @@ verify_ssl = true
 [dev-packages]
 pyqt5 = "*"
 gitpython = "*"
+pytest = "*"
+bcrypt = "*"
+dill = "*"
+logzero = "*"
+setup-py-upgrade = "*"
 
 [packages]
 
