@@ -11,6 +11,8 @@ bcrypt = "*"
 dill = "*"
 logzero = "*"
 setup-py-upgrade = "*"
+selenium = "*"
+bs4 = "*"
 
 [packages]
 
