@@ -37,16 +37,27 @@ class TestScraper:
             self.raise_system_exit()
 
 
+    # Fixture
+    @pytest.fixture
+    def get_browser_instance(self):
+        scraper = Scraper()
+        return scraper.get_browser_instance("https://www.google.co.za")
+
+
+    @pytest.fixture
+    def get_soup(self):
+        scraper = Scraper()
+        source = scraper.get_browser_instance("https://www.google.co.za")
+        return scraper.get_page_soup(source)
+
+
     #001
     # Test if driver is available
-    def test_if_driver_available(self):
-        scraper = Scraper()
-        assert scraper.get_page_soup("https://www.google.co.za")
+    def test_if_driver_available(self, get_browser_instance):
+        assert get_browser_instance
 
 
     #002
     # Check if page element can be found
-    def test_get_page_element(self):
-        scraper = Scraper()
-        soup = scraper.get_page_soup("https://www.google.co.za")
-        assert scraper.get_page_element(soup, 'name', 'q')
+    def test_get_page_element(self, get_soup):
+        pass
