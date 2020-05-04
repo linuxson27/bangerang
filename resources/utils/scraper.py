@@ -10,7 +10,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+import logzero
+from logzero import logger
 #+++++++++++++++++
+
+# Setup log file
+logzero.logfile("logs/logfile.log", maxBytes=1e6, backupCount=3)
 
 
 class Scraper:
@@ -39,18 +44,35 @@ class Scraper:
 
 
     # Get page source for further manipulation
-    def get_page_source(self, url):
+    def get_page_content(self, url):
         # Get browser instance
         self.__get_browser_instance(url)
         # Get page content
-        content = self.driver.page_source
-        return content
+        return self.driver.page_source
 
 
     # Get specified page element - single only
-    def get_page_element(self, source, by, prop, value):
-        # Rewrite method to use driver methods instead - from driver page source
-        return element
+    def get_page_element(self, by=None, value=None):
+        by = by.lower()
+        # Test by value and return By locator
+        if by == "class":
+            return By.CLASS_NAME
+        elif by == "css":
+            return By.CSS_SELECTOR
+        elif by == "id":
+            return By.ID
+        elif by == "link":
+            return By.LINK_TEXT
+        elif by == "name":
+            return By.NAME
+        elif by == "tag":
+            return By.TAG_NAME
+        elif by == "xpath":
+            return By.XPATH
+        else:
+            logger.exception("Locator type '" + by + "' not correct/supported")
+            raise(ValueError)
+        return False
 
 
     # Get soup from driver page source
