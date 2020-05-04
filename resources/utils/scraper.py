@@ -7,7 +7,9 @@ import time
 # Helpers and utils imports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import logzero
@@ -29,30 +31,28 @@ class Scraper:
 
 
     # Create browser instance
-    def __get_browser_instance(self, url):
+    def __get_driver_instance(self, url):
         if self.driver == None:
             # Chrome driver instance - headless
-            options= webdriver.ChromeOptions()
-            options.add_argument('headless')
-            options.add_argument('window-size=1920x1080')
-            options.add_argument('disable-gpu')
-            self.driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=options)
+            #  options= webdriver.ChromeOptions()
+            #  options.add_argument('headless')
+            #  options.add_argument('window-size=1920x1080')
+            #  options.add_argument('disable-gpu')
+            self.driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')#, options=options)
             self.driver.get(url)
-            return self.driver
         else:
-            return self.driver.get(url)
-
+            self.driver.get(url)
 
     # Get page source for further manipulation
-    def get_page_content(self, url):
+    def get_driver_content(self, url):
         # Get browser instance
-        self.__get_browser_instance(url)
+        self.__get_driver_instance(url)
         # Get page content
         return self.driver.page_source
 
 
-    # Get specified page element
-    def get_page_element(self, by="id", value=None):
+    # Get specified page element/s
+    def get_driver_element(self, by="id", value=None):
         # Convert to lower case
         by = by.lower()
         # Test by value and return By locator
@@ -68,26 +68,44 @@ class Scraper:
             by = By.CSS_SELECTOR
             value = '[name="%s"]' % value
         else:
-            # Log if incorrect 'by' value was supported
-            logger.exception("Locator type '" + by + "' not correct/supported")
+            # Log if incorrect 'by' value was supplied
+            logger.warning("Locator type '" + by + "' not correct/supported")
             raise(ValueError)
 
         # ['value'] at end of statement actualy refers 
         # to the 'value' key of the dict returned
-        return self.driver.execute("findElements",
+        return self.driver.execute("findElements", 
                                    {"using": by, "value": value})['value']
 
 
+    # Insert text into input field
+    def insert_text(self, element=WebElement, text=None):
+        # Test here if element is of type WebElement
+        if isinstance(element, WebElement):
+            # Test here if webelement has 'text' attribute
+            if element.get_attribute('type') == 'text':
+                # Test if element readonly
+                if element.get_attribute('readonly'):
+                    self.driver.execute_script("arguments[0].readOnly=false", element)
+                element.send_keys(text)
+            else:
+                # Log any errors
+                logger.warning("Element is not of type 'input'")
+                raise(TypeError)
+        else:
+            logger.warning("Element is not of type HTML element")
+            raise(TypeError)
+
+
+    def send_enter_key_to_element(self, element):
+        return element.send_keys(Keys.RETURN)
+
+
     # Get soup from driver page source
-    def get_page_soup(self, content):
+    def get_driver_soup(self, content):
         soup= BeautifulSoup(content, 'html.parser')
         # Close page and browser object
         self.driver.quit()
         self.driver = None
         return soup
-
-
-    # Enter value into input query field
-    def do_query(self, element , query):
-        pass
 
