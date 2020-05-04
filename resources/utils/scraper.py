@@ -54,25 +54,33 @@ class Scraper:
     # Get specified page element - single only
     def get_page_element(self, by=None, value=None):
         by = by.lower()
+        locator = None
         # Test by value and return By locator
         if by == "class":
-            return By.CLASS_NAME
+            locator = By.CLASS_NAME
         elif by == "css":
-            return By.CSS_SELECTOR
+            locator = By.CSS_SELECTOR
         elif by == "id":
-            return By.ID
+            locator = By.ID
         elif by == "link":
-            return By.LINK_TEXT
+            locator = By.LINK_TEXT
         elif by == "name":
-            return By.NAME
+            locator = By.NAME
         elif by == "tag":
-            return By.TAG_NAME
+           locator = By.TAG_NAME
         elif by == "xpath":
-            return By.XPATH
+            locator = By.XPATH
         else:
             logger.exception("Locator type '" + by + "' not correct/supported")
             raise(ValueError)
-        return False
+        print(locator)
+        print(type(locator))
+        print(type(By.CLASS_NAME))
+        # Return instace of driver object with new params
+        return self.driver.execute("findElements",
+                                   {"using": locator, "value": value})['value']
+        
+
 
 
     # Get soup from driver page source

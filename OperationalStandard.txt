@@ -1,0 +1,28 @@
+1.	Must have integrated video player, with loaded codecs
+2.	Incorporate scheduling system regarding show views and future
+	downloads (use torrent library)
+3.	Menu library of all shows, filtered or alphabetical, either
+	already owned or still to be downloaded
+4.	Movie/series thumbnails download and info from IMDB website
+5.	Have separate view profiles
+6.	Visibly show new series have been added or have been watched,
+	and also automatically launch from next episode in line
+7.	Show list of series closely related to either genre or actors
+	in currently owned movies/series
+8.	Supply option to user of how to build library when downloading
+	new shows related to user's viewing patterns/usage - suggest
+	experimental shows outside of viewing patterns (low chance)
+9.	Add chat feature so users can share shows - give user option
+	to either add show from message to library or view only
+10.	Decode all thumbnails to base64
+11.	Notify user of newly discovered shows on Netflix, Amazon, etc.
+	Then give user option to add show to watchlist for future
+	download and viewing
+12.	Backup database to cloud for re-building (Dropbox?)
+13.	Regularly check for updates
+14.	Auto-purge of shows already watched older than 3 months? (option)
+15.	Run downloads section as background service so even after app
+	has been closed, it can still update and download shows
+16.	Be able to sort existing directory and re-locate to specified
+	automatically generated folder structure, perhaps even rename
+	the files to follow specific naming structure	
