@@ -51,36 +51,31 @@ class Scraper:
         return self.driver.page_source
 
 
-    # Get specified page element - single only
-    def get_page_element(self, by=None, value=None):
+    # Get specified page element
+    def get_page_element(self, by="id", value=None):
+        # Convert to lower case
         by = by.lower()
-        locator = None
         # Test by value and return By locator
-        if by == "class":
-            locator = By.CLASS_NAME
-        elif by == "css":
-            locator = By.CSS_SELECTOR
-        elif by == "id":
-            locator = By.ID
-        elif by == "link":
-            locator = By.LINK_TEXT
-        elif by == "name":
-            locator = By.NAME
+        if by == "id":
+            by = By.CSS_SELECTOR
+            value = '[id="%s"]' % value
         elif by == "tag":
-           locator = By.TAG_NAME
-        elif by == "xpath":
-            locator = By.XPATH
+            by = By.CSS_SELECTOR
+        elif by == "class":
+            by = By.CSS_SELECTOR
+            value = ".%s" % value
+        elif by == "name":
+            by = By.CSS_SELECTOR
+            value = '[name="%s"]' % value
         else:
+            # Log if incorrect 'by' value was supported
             logger.exception("Locator type '" + by + "' not correct/supported")
             raise(ValueError)
-        print(locator)
-        print(type(locator))
-        print(type(By.CLASS_NAME))
-        # Return instace of driver object with new params
-        return self.driver.execute("findElements",
-                                   {"using": locator, "value": value})['value']
-        
 
+        # ['value'] at end of statement actualy refers 
+        # to the 'value' key of the dict returned
+        return self.driver.execute("findElements",
+                                   {"using": by, "value": value})['value']
 
 
     # Get soup from driver page source
